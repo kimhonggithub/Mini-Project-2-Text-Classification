@@ -18,4 +18,3 @@ def text_to_word_embeddings(text_data, word2vec_model):
             
     return np.array(embeddings)
 
-
