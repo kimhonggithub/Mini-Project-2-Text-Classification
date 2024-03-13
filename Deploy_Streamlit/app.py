@@ -5,14 +5,13 @@ import joblib
 import streamlit as st
 import pandas as pd
 import sys
-sys.path.append('/path/to/Mini-Project-2-Text-Classification')
-
+sys.path.append('./')
 from get_more_features import *
 from embedding_word import *
 from text_preprocess import *
 
 # Load the saved MLP model
-mlp_model = joblib.load('Deploy_streamlit/mlp_model.pkl')  
+mlp_model = joblib.load('Deploy_streamlit/best_mlp.pkl')  
 
 # Load the Word2Vec model
 model = Word2Vec.load("Deploy_streamlit/word2vec_model.bin")
@@ -53,21 +52,21 @@ def predict_sentiment(reviews):
 # Streamlit UI
 st.title("Sentiment Analysis App")
 
-# Input text box for user to enter reviews
-user_input = st.text_area("Enter reviews (one per line):")
+# Multiline text input for user to enter multiple reviews
+user_input = st.text_area("Enter multiple reviews (one per line):", height=200)
 
 if st.button("Predict Sentiment"):
     if user_input:
+        # Split the user input into individual reviews
         reviews_list = user_input.split('\n')
         sentiment_predictions = predict_sentiment(reviews_list)
         
         # Map numeric predictions to user-friendly labels
         sentiment_labels = ['Positive' if pred == 1 else 'Negative' for pred in sentiment_predictions]
         
+        # Display sentiment predictions for each review
         for review, label in zip(reviews_list, sentiment_labels):
-            
             st.write(f"Review: {review} ")
-            st.success(f"Sentiment Predictions: {label}")
+            st.success(f"Sentiment Prediction: {label}")
     else:
         st.warning("Please enter at least one review.")
-
