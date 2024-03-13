@@ -1,20 +1,23 @@
 
 from scipy.sparse import csr_matrix, hstack
 from gensim.models import Word2Vec
-from embedding_word import *
-from text_preprocess import clean_text  # Assuming you have a function for text cleaning
 import joblib
 import streamlit as st
 import pandas as pd
-from sklearn.preprocessing import MaxAbsScaler
+import sys
+sys.path.append('/path/to/Mini-Project-2-Text-Classification')
+
+from get_more_features import *
+from embedding_word import *
+from text_preprocess import *
 
 # Load the saved MLP model
-mlp_model = joblib.load('mlp_model.pkl')  
+mlp_model = joblib.load('Deploy_streamlit/mlp_model.pkl')  
 
 # Load the Word2Vec model
-model = Word2Vec.load("word2vec_model.bin")
+model = Word2Vec.load("Deploy_streamlit/word2vec_model.bin")
 
-scaler = joblib.load('maxabs_scaler.pkl')  
+scaler = joblib.load('Deploy_streamlit/maxabs_scaler.pkl')  
 
 # ... (previous code remains the same)
 
