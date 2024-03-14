@@ -11,12 +11,12 @@ from embedding_word import *
 from text_preprocess import *
 
 # Load the saved MLP model
-mlp_model = joblib.load('Deploy_streamlit/best_mlp.pkl')  
+mlp_model = joblib.load('Deploy_Streamlit/best_mlp.pkl')  
 
 # Load the Word2Vec model
-model = Word2Vec.load("Deploy_streamlit/word2vec_model.bin")
+model = Word2Vec.load("Deploy_Streamlit/word2vec_model.bin")
 
-scaler = joblib.load('Deploy_streamlit/maxabs_scaler.pkl')  
+scaler = joblib.load('Deploy_Streamlit/maxabs_scaler.pkl')  
 
 # ... (previous code remains the same)
 
