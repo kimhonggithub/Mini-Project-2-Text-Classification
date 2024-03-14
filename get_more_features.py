@@ -5,9 +5,10 @@ import math
 
 
 positive_words = set(open('Mini_Project_2_Data/positive-words.txt').read().splitlines())
-negative_words = set(open('Mini_Project_2_Data/negative-words.txt', encoding='utf-8').read().splitlines())
-
-
+negative_words = set()
+with open('Mini_Project_2_Data/negative-words.txt', encoding='utf-8', errors='ignore') as file:
+    for line in file:
+        negative_words.add(line.strip())
 def count_positive_words(text):
 
     words = text.lower().split()
