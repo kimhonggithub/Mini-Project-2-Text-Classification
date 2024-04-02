@@ -1,46 +1,42 @@
 from nltk.tokenize import word_tokenize
-import nltk
 import re
-import string
 import pandas as pd
 import contractions
+# Import Spacy libary
+import spacy
+# Load the pre-trained spaCy model
+nlp = spacy.load('en_core_web_sm')
 # Define function for text preprocessing for testing
-def clean_text(text, is_lower_case=True):
-    if pd.isna(text):  # Check for NaN values
-        return ""  # Return an empty string for missing values
-    
-    # Convert text to lowercase
-    text = text.lower()
-    
-    # Remove punctuation and numbers
-    text = re.sub(r'[^\w\s]', '', text)
-    text = re.sub(r'\d+', '', text)
-    
+def clean_text(text):
     # Remove extra spaces
     text = re.sub(r'\s+', ' ', text)
-    
-    # Replace repetitions of punctuation with a single punctuation
-    text = re.sub(r'([' + string.punctuation + r'])\1+', r'\1', text)
-    
-    # Remove emojis
-    text = text.encode('ascii', 'ignore').decode('ascii')
-    
-    # Remove emoticons
-    emoticons = re.compile(r'(?::|;|=)(?:-)?(?:\)|\(|D|P)')
-    text = emoticons.sub('', text)
-    
+
+    # Convert text to lowercase
+    text = text.lower()
+
     # Expand contractions
     text = contractions.fix(text)
-    
-    # Remove stop words
-    stop_words = nltk.corpus.stopwords.words('english')
-    stop_words.remove('no')
-    stop_words.remove('not')
 
-    words = word_tokenize(text)
-    words = [word for word in words if word not in stop_words]
+    # Replace repetitions of punctuation with a single punctuation mark
+    text = re.sub(r'(\W)\1+', r'\1', text)
 
-    # Join the words back into a cleaned sentence
-    cleaned_text = ' '.join(words)
-    
+    # Remove punctuation(except !) and numbers
+    text = re.sub(r'[^a-zA-Z!]+', ' ', text)
+
+    # Remove emojis
+    text = text.encode('ascii', 'ignore').decode('ascii')
+
+    # Tokenize text using SpaCy
+    doc = nlp(text)
+    tokens = [token.text for token in doc]
+
+    # Remove stop words except 'no' and 'not' - SpaCy has its own stop words list
+    tokens = [token for token in tokens if not nlp.vocab[token].is_stop or token in {'no', 'not'}]
+
+    # Lemmatization - SpaCy performs lemmatization automatically
+    tokens = [token.lemma_ for token in doc]
+
+    # Return Join tokens back into text
+    cleaned_text = ' '.join(tokens)
+
     return cleaned_text
