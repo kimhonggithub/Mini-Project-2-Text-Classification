@@ -6,7 +6,7 @@ import streamlit as st
 import pandas as pd
 import sys
 sys.path.append('./')
-from get_more_features import *
+from get_features import *
 from embedding_word import *
 from text_preprocess import *
 
